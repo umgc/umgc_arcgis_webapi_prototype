@@ -1,5 +1,4 @@
 import { Injectable, ElementRef } from '@angular/core';
-import esri = __esri;
 import { loadModules } from 'esri-loader';
 import { Subject } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -15,7 +14,7 @@ export interface ISuggestionRequest {
     text: string;
     countryCode?: string;
     f?: 'JSON' | 'PJSON';
-    searchExtent?: esri.Extent;
+    searchExtent?: __esri.Extent;
 }
 
 const ARCGIS_SUGGEST_SERVER =
@@ -28,14 +27,14 @@ const ARCGIS_FINDCAN_SERVER =
 export class AddressLocatorService {
     private mapDirectory: {
         [index: string]: {
-            mapLayer: esri.WebMap;
+            mapLayer: __esri.WebMap;
         };
     } = {};
 
-    private WebMap: esri.WebMapConstructor;
-    private MapView: esri.MapViewConstructor;
-    private MapSearchWidget: esri.widgetsSearchConstructor;
-    private GeometryPoint: esri.PointConstructor;
+    private WebMap: __esri.WebMapConstructor;
+    private MapView: __esri.MapViewConstructor;
+    private MapSearchWidget: __esri.widgetsSearchConstructor;
+    private GeometryPoint: __esri.PointConstructor;
 
     constructor(private http: HttpClient) {}
 
@@ -218,7 +217,7 @@ export class AddressLocatorService {
     private loadViewMap(
         portalItemId: string,
         domElement: ElementRef
-    ): Promise<esri.MapView> {
+    ): Promise<__esri.MapView> {
         return new Promise((resolve, reject) => {
             const clientMap = this.mapDirectory[portalItemId];
 
