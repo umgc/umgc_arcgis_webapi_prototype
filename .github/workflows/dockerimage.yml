@@ -5,10 +5,8 @@ name: Docker Image CI
 # Controls when the action will run. Triggers the workflow on push or pull request 
 # events but only for the master branch
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  release:
+    types: [ published ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -21,6 +19,25 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+    
+    - name: Login to DockerHub Registry
+      run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
+
+    - name: Get the version
+	    id: vars
+	    run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
+      
+    - name: Build the tagged Docker image
+      run: docker build . --file docker-dev.dockerfile --tag ugmccityproject/arcgis-webapi-proto:${{steps.vars.outputs.tag}}
+      
+    - name: Push the tagged Docker image
+      run: ugmccityproject/arcgis-webapi-proto:${{steps.vars.outputs.tag}}
+      
+    - name: Build the latest Docker image
+      run: docker build . --file docker-dev.dockerfile --tag ugmccityproject/arcgis-webapi-proto:cli:latest
+    
+    - name: Push the latest Docker image
+      run: docker push ugmccityproject/arcgis-webapi-proto:latest
 
     # Runs a single command using the runners shell
     - name: Run a one-line script
