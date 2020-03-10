@@ -14,6 +14,7 @@ import { AppDialogMapSelectionComponent } from './map-selection.dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddressLocatorService } from './address-locator.service';
 import { HttpClientModule } from '@angular/common/http';
+import { environment } from '../../src/environments/environment';
 
 @NgModule({
     declarations: [AppComponent, AppDialogMapSelectionComponent],
@@ -30,7 +31,11 @@ import { HttpClientModule } from '@angular/common/http';
         HttpClientModule,
     ],
     entryComponents: [AppDialogMapSelectionComponent],
-    providers: [AddressLocatorService],
+    providers: [
+        AddressLocatorService,
+        { provide: 'BACKEND_API_URL', useValue: environment.backendApiUrl },
+        { provide: 'DEFAULT_LANGUAGE', useValue: environment.defaultLanguage },
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
